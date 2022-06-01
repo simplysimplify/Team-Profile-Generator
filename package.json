@@ -1,0 +1,22 @@
+{
+  "name": "inquirer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simplysimplify/Team-Profile-Generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^6.5.0"
+  },
+  "bugs": {
+    "url": "https://github.com/simplysimplify/Team-Profile-Generator/issues"
+  },
+  "homepage": "https://github.com/simplysimplify/Team-Profile-Generator#readme"
+}
