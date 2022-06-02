@@ -1,86 +1,83 @@
+const { create } = require('domain');
 const fs = require('fs');
 const inquirer = require('inquirer');
 const totalMembers = 0
+var htmlBuild = false
+var memberDone = false
+
 
 function Member(Name, Role, Github, Email, Phone) {
-	this.name = Name
+	this.Name = Name
 	this.Role = Role
 	this.Github = Github
 	this.Email = Email
 	this.Phone = Phone
 }
 
-inquirer
-	.prompt([
-		{
-			type: 'input',
-			message: 'Whats the name of this member?',
-			name: 'memberName',
-		},
-	])
-	.then((response) => {
-		Member.Name = response.memberName
-		console.log(Member.Name)
-		inquirer.prompt([
+addAnother()
+
+function addAnother () {
+	inquirer
+		.prompt([
 			{
-				type: 'list',
-				message: 'What role does this member fill?',
-				name: 'memberRole',
-				choices: ['Manager', 'Senior Dev', 'Junior Dev', 'Intern'],
+				type: 'input',
+				message: 'Whats the name of this member?',
+				name: 'memberName',
 			},
 		])
-			.then((response) => {
-				Member.Role = response.memberRole
-				console.log(Member.Role)
-				inquirer.prompt([
-					{
-						type: 'input',
-						message: 'Enter GitHub link of member.',
-						name: 'memberGithub',
-					},
-				])
-					.then((response) => {
-						Member.Github = response.memberGithub
-						console.log(Member.Github)
-						inquirer.prompt([
-							{
-								type: 'input',
-								message: 'Enter email of member.',
-								name: 'memberEmail',
-							},
-						])
-							.then((response) => {
-								Member.Email = response.memberEmail
-								console.log(Member.Email)
-								inquirer.prompt([
-									{
-										type: 'input',
-										message: 'Enter phone number of this member.',
-										name: 'memberPhone',
-									},
-								])
-									.then((response) => {
-										Member.Phone = response.memberPhone
-										console.log(Member.Phone)
-									})
-									.then((response) => {
-										inquirer.prompt([
-											{
-												type: 'confirm',
-												message: 'Enter phone number of this member.',
-												name: 'memberPhone',
-											},
+		.then((response) => {
+			Member.Name = response.memberName
+			inquirer.prompt([
+				{
+					type: 'list',
+					message: 'What role does this member fill?',
+					name: 'memberRole',
+					choices: ['Manager', 'Senior Dev', 'Junior Dev', 'Intern'],
+				},
+			])
+				.then((response) => {
+					Member.Role = response.memberRole
+					inquirer.prompt([
+						{
+							type: 'input',
+							message: 'Enter GitHub link of member.',
+							name: 'memberGithub',
+						},
+					])
+						.then((response) => {
+							Member.Github = response.memberGithub
+							inquirer.prompt([
+								{
+									type: 'input',
+									message: 'Enter email of member.',
+									name: 'memberEmail',
+								},
+							])
+								.then((response) => {
+									Member.Email = response.memberEmail
+									inquirer.prompt([
+										{
+											type: 'input',
+											message: 'Enter phone number of this member.',
+											name: 'memberPhone',
+										},
 									])
-							})
-					})
-			})
-	}) 
-
-function createHTML() {
-	console.log(Member)
+										.then((response) => {
+											Member.Phone = response.memberPhone
+											createHTML()
+											addAnother()
+										})
+								})
+						})
+				})
+		})
 }
 
-const htmlText = `<!DOCTYPE html>
+function createHTML() {
+	// Creates HTML boilerplate for the employee cards to be put on (provided there isnt already one).
+	if (htmlBuild === false) {
+		console.log("Building Boilerplate")
+		let htmlText = `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -95,19 +92,23 @@ const htmlText = `<!DOCTYPE html>
 		<h1 class="display-4">
 			Team Profiles!
 		</h1>
+		`
+		fs.appendFile('index.html', htmlText, (err) =>
+		err ? console.error(err) : console.log('File written'))
+		htmlBuild = true
+	}
+	// Creates employee cards.
+	let htmlText = `\n	<div class="container">
 		<div class="card" style="width: 18rem;">
 			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-					content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
+				<h5 class="card-title">${Member.Name}</h5>
+				<p class="card-text">${Member.Role}</p>
+				<p class="card-text">${Member.Email}</p>
+				<p class="card-text">${Member.Phone}</p>
+				<p class="card-text">${Member.Github}</p>
 			</div>
 		</div>
-	</div>
-</body>
-</html>`
-
-									// .then(() => {
-									// 	fs.appendFile('index.html', htmlText, (err) =>
-									// 	err ? console.error(err) : console.log('File written'))
-									// })
+	</div>`
+	fs.appendFile('index.html', htmlText, (err) =>
+		err ? console.error(err) : console.log('File written'))
+}
