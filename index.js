@@ -2,9 +2,6 @@ const fs = require('fs');
 const inquirer = require('inquirer');
 const totalMembers = 0
 
-// Member Array is organized such that lower numbers are lower level employee's
-const memberArray = []
-
 function Member(Name, Role, Github, Email, Phone) {
 	this.name = Name
 	this.Role = Role
@@ -66,11 +63,51 @@ inquirer
 										Member.Phone = response.memberPhone
 										console.log(Member.Phone)
 									})
-								.then(() => {
-										console.log(Member)
-									})
+									.then((response) => {
+										inquirer.prompt([
+											{
+												type: 'confirm',
+												message: 'Enter phone number of this member.',
+												name: 'memberPhone',
+											},
+									])
 							})
 					})
 			})
-	})
+	}) 
 
+function createHTML() {
+	console.log(Member)
+}
+
+const htmlText = `<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<title>Document</title>
+</head>
+<body>
+	<div class="jumbotron jumbotron-fluid">
+		<h1 class="display-4">
+			Team Profiles!
+		</h1>
+		<div class="card" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Card title</h5>
+				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+					content.</p>
+				<a href="#" class="btn btn-primary">Go somewhere</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>`
+
+									// .then(() => {
+									// 	fs.appendFile('index.html', htmlText, (err) =>
+									// 	err ? console.error(err) : console.log('File written'))
+									// })
