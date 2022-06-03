@@ -63,7 +63,7 @@ function addAnother() {
 											}
 										])
 										.then((response) => {
-											Member.Misc = "Github: " + response.memberMisc
+											Member.Misc = `<a href="${response.memberMisc}">Github</a>` 
 											Member.Email = response.memberEmail
 											createHTML()
 											addAnother()
@@ -157,8 +157,7 @@ function createHTML() {
 				<p class="card-text">${Member.Misc}</p>
 			</div>
 		</div>
-	</div>
-	`
+	</div>	`
 	fs.appendFile('index.html', htmlText, (err) =>
 		err ? console.error(err) : console.log('File written'))
 }
