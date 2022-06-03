@@ -13,7 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^6.5.0"
+    "inquirer": "^6.5.0",
+    "jest": "^28.1.0"
   },
   "bugs": {
     "url": "https://github.com/simplysimplify/Team-Profile-Generator/issues"

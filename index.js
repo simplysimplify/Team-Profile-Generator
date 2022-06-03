@@ -6,22 +6,21 @@ var htmlBuild = false
 var memberDone = false
 
 
-function Member(Name, Role, Github, Email, Phone) {
+function Member(Name, Role, Iden, Misc) {
 	this.Name = Name
 	this.Role = Role
-	this.Github = Github
-	this.Email = Email
-	this.Phone = Phone
+	this.Iden = Iden
+	this.Misc = Misc
 }
 
 addAnother()
 
-function addAnother () {
+function addAnother() {
 	inquirer
 		.prompt([
 			{
 				type: 'input',
-				message: 'Whats the name of this member?',
+				message: 'Enter employee name:',
 				name: 'memberName',
 			},
 		])
@@ -30,9 +29,9 @@ function addAnother () {
 			inquirer.prompt([
 				{
 					type: 'list',
-					message: 'What role does this member fill?',
+					message: 'Select employee role:',
 					name: 'memberRole',
-					choices: ['Manager', 'Senior Dev', 'Junior Dev', 'Intern'],
+					choices: ['Manager', 'Engineer', 'Employee', 'Intern'],
 				},
 			])
 				.then((response) => {
@@ -40,38 +39,88 @@ function addAnother () {
 					inquirer.prompt([
 						{
 							type: 'input',
-							message: 'Enter GitHub link of member.',
-							name: 'memberGithub',
-						},
+							message: 'Enter employee email:',
+							name: 'memberEmail',
+						}
 					])
 						.then((response) => {
-							Member.Github = response.memberGithub
+							Member.Email = response.memberEmail
 							inquirer.prompt([
 								{
 									type: 'input',
-									message: 'Enter email of member.',
-									name: 'memberEmail',
-								},
+									message: 'Enter employee id:',
+									name: 'memberIden',
+								}
 							])
 								.then((response) => {
-									Member.Email = response.memberEmail
-									inquirer.prompt([
-										{
-											type: 'input',
-											message: 'Enter phone number of this member.',
-											name: 'memberPhone',
-										},
-									])
+									Member.Iden = response.memberIden
+									if (Member.Role === "Engineer") {
+										inquirer.prompt([
+											{
+												type: 'input',
+												message: 'Enter employee Github:',
+												name: 'memberMisc',
+											}
+										])
 										.then((response) => {
-											Member.Phone = response.memberPhone
+											Member.Misc = "Github: " + response.memberMisc
+											Member.Email = response.memberEmail
 											createHTML()
 											addAnother()
-										})
+											})
+									}
+									if (Member.Role === "Manager") {
+										inquirer.prompt([
+											{
+												type: 'input',
+												message: 'Enter employee office number:',
+												name: 'memberMisc',
+											}
+										])
+										.then((response) => {
+											Member.Misc = "Office Number: " + response.memberMisc
+											Member.Email = response.memberEmail
+											createHTML()
+											addAnother()
+											})
+									}
+									if (Member.Role === "Intern") {
+										inquirer.prompt([
+											{
+												type: 'input',
+												message: 'Enter employee school:',
+												name: 'memberMisc',
+											}
+										])
+										.then((response) => {
+											Member.Misc = "Intern School: " + response.memberMisc
+											Member.Email = response.memberEmail
+											createHTML()
+											addAnother()
+											})
+									}
+									if (Member.Role === "Employee") {
+										inquirer.prompt([
+											{
+												type: 'input',
+												message: 'Enter employee years:',
+												name: 'memberMisc',
+											}
+										])
+										.then((response) => {
+											Member.Misc = "Years of employment: " + response.memberMisc
+											Member.Email = response.memberEmail
+											createHTML()
+											addAnother()
+											})
+									}
 								})
 						})
 				})
 		})
 }
+
+
 
 function createHTML() {
 	// Creates HTML boilerplate for the employee cards to be put on (provided there isnt already one).
@@ -92,23 +141,24 @@ function createHTML() {
 		<h1 class="display-4">
 			Team Profiles!
 		</h1>
-		`
+			`
 		fs.appendFile('index.html', htmlText, (err) =>
 		err ? console.error(err) : console.log('File written'))
 		htmlBuild = true
 	}
 	// Creates employee cards.
-	let htmlText = `\n	<div class="container">
+	let htmlText = `\n<div class="container">
 		<div class="card" style="width: 18rem;">
 			<div class="card-body">
-				<h5 class="card-title">${Member.Name}</h5>
-				<p class="card-text">${Member.Role}</p>
-				<p class="card-text">${Member.Email}</p>
-				<p class="card-text">${Member.Phone}</p>
-				<p class="card-text">${Member.Github}</p>
+				<h5 class="card-title">Name: ${Member.Name}</h5>
+				<p class="card-text">Role: ${Member.Role}</p>
+				<p class="card-text">Email: ${Member.Email}</p>
+				<p class="card-text">Identification #: ${Member.Iden}</p>
+				<p class="card-text">${Member.Misc}</p>
 			</div>
 		</div>
-	</div>`
+	</div>
+	`
 	fs.appendFile('index.html', htmlText, (err) =>
 		err ? console.error(err) : console.log('File written'))
 }
