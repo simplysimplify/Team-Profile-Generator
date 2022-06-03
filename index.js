@@ -63,7 +63,7 @@ function addAnother() {
 											}
 										])
 										.then((response) => {
-											Member.Misc = `<a href="${response.memberMisc}">Github</a>` 
+											Member.Misc = `<a href="https://github.com/${response.memberMisc}">Github</a>` 
 											Member.Email = response.memberEmail
 											createHTML()
 											addAnother()
